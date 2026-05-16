@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>We the Future — Declaration Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===================== TOKENS ===================== */
+:root {
+  --navy:       #08122e;
+  --navy-mid:   #0f1f52;
+  --navy-card:  rgba(255,255,255,0.06);
+  --red:        #C8102E;
+  --red-glow:   rgba(200,16,46,0.45);
+  --red-hover:  #a50d25;
+  --gold:       #F5C41A;
+  --gold-glow:  rgba(245,196,26,0.35);
+  --white:      #ffffff;
+  --w90:        rgba(255,255,255,0.9);
+  --w60:        rgba(255,255,255,0.6);
+  --w30:        rgba(255,255,255,0.3);
+  --w12:        rgba(255,255,255,0.12);
+  --w06:        rgba(255,255,255,0.06);
+  --correct:    #22c55e;
+  --wrong:      #ef4444;
+  --radius-lg:  18px;
+  --radius-md:  14px;
+  --radius-sm:  10px;
+}
+
+/* ===================== RESET ===================== */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #050c22;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* ===================== PHONE SHELL ===================== */
+.phone {
+  width: 390px;
+  height: 844px;
+  background: var(--navy);
+  border-radius: 44px;
+  overflow: hidden;
+  position: relative;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.07),
+    0 40px 100px rgba(0,0,0,0.7),
+    inset 0 0 60px rgba(255,255,255,0.02);
+}
+
+/* Background nebula */
+.phone::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 15%, rgba(200,16,46,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 35% at 80% 70%, rgba(8,18,60,0.8) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% 50%, rgba(15,31,82,0.6) 0%, transparent 80%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ===================== STARS ===================== */
+.stars{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.star{position:absolute;background:white;border-radius:50%;animation:twinkle var(--d,2s) ease-in-out infinite alternate;}
+@keyframes twinkle{from{opacity:.05}to{opacity:.7}}
+
+/* ===================== SCREENS ===================== */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 24px 32px;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px) scale(0.98);
+  transition: opacity .32s ease, transform .32s ease;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.screen::-webkit-scrollbar{display:none;}
+.screen.active{opacity:1;pointer-events:all;transform:none;}
+
+/* ===================== LOGO ===================== */
+.logo-wrap {
+  width: 86px; height: 86px;
+  border-radius: 50%;
+  background: linear-gradient(140deg, #C8102E 0%, #0f1f52 100%);
+  border: 2.5px solid rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 38px;
+  box-shadow: 0 8px 36px var(--red-glow), inset 0 0 20px rgba(255,255,255,0.05);
+  animation: floatBob 3.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes floatBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+.logo-sm{width:64px;height:64px;font-size:28px;}
+
+.app-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--white);
+  text-align: center;
+  margin-top: 18px;
+  letter-spacing: .3px;
+  line-height: 1.15;
+}
+.app-sub {
+  font-size: 12px;
+  color: var(--w60);
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 600;
+  margin-top: 6px;
+  text-align: center;
+}
+
+/* ===================== BUTTONS ===================== */
+.btn-primary {
+  background: var(--red);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 16px 48px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: .4px;
+  box-shadow: 0 6px 28px var(--red-glow);
+  transition: transform .12s, box-shadow .12s, background .12s;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(255,255,255,0.1),transparent);pointer-events:none;}
+.btn-primary:hover{background:var(--red-hover);transform:translateY(-2px);box-shadow:0 12px 36px var(--red-glow);}
+.btn-primary:active{transform:scale(.97);}
+.btn-primary.full{width:100%;padding:17px;}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--w60);
+  border: 1.5px solid var(--w30);
+  border-radius: var(--radius-md);
+  padding: 14px 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+  width: 100%;
+}
+.btn-ghost:hover{background:var(--w06);border-color:var(--w60);color:var(--white);}
+
+/* ===================== SECTION DIVIDER ===================== */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--w12);
+  margin: 20px 0;
+}
+
+/* ===================== LEADERBOARD ===================== */
+.lb-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  width: 100%;
+}
+.lb-header-text{font-size:12px;color:var(--w60);text-transform:uppercase;letter-spacing:2px;font-weight:700;}
+.lb-bar{flex:1;height:3px;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--red));box-shadow:0 0 10px var(--gold-glow);}
+
+.lb-row {
+  display: flex;
+  align-items: center;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--navy-card);
+  border: 1px solid var(--w06);
+  margin-bottom: 8px;
+  width: 100%;
+  animation: slideIn .4s ease both;
+}
+.lb-row:nth-child(1){animation-delay:.05s}
+.lb-row:nth-child(2){animation-delay:.1s}
+.lb-row:nth-child(3){animation-delay:.15s}
+.lb-row:nth-child(4){animation-delay:.2s}
+.lb-row:nth-child(5){animation-delay:.25s}
+@keyframes slideIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+
+.lb-medal{width:30px;height:30px;border-radius:50%;background:var(--w12);display:flex;align-items:center;justify-content:center;font-size:13px;margin-right:12px;flex-shrink:0;}
+.lb-name{flex:1;font-size:15px;color:var(--white);font-weight:500;}
+.lb-time{font-size:12px;color:var(--w60);margin-right:10px;font-variant-numeric:tabular-nums;}
+.lb-pts{background:var(--red);color:white;font-size:12px;font-weight:700;padding:4px 10px;border-radius:8px;min-width:42px;text-align:center;}
+
+/* ===================== SETUP ===================== */
+.input-wrap{position:relative;width:100%;margin-bottom:20px;}
+.name-input {
+  width: 100%;
+  background: var(--w06);
+  border: 1.5px solid var(--w12);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  padding: 15px 18px;
+  outline: none;
+  transition: border-color .2s, background .2s;
+}
+.name-input::placeholder{color:var(--w30);}
+.name-input:focus{border-color:var(--gold);background:rgba(245,196,26,0.04);}
+
+.round-badge {
+  background: var(--w06);
+  border: 1px solid var(--w12);
+  border-radius: 99px;
+  padding: 6px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.round-label{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:white;}
+.topic-chip{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:2px;font-weight:700;background:rgba(245,196,26,0.12);padding:3px 10px;border-radius:99px;}
+
+/* ===================== PROGRESS BAR SCENE ===================== */
+.scene-wrap{width:100%;margin-bottom:12px;}
+.scene-svg{width:100%;height:88px;display:block;overflow:visible;}
+
+.progress-meta{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 2px;
+}
+.q-counter{font-size:12px;color:var(--w60);font-weight:600;letter-spacing:.5px;}
+.timer-display{font-size:15px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums;letter-spacing:1px;}
+.score-pill{font-size:12px;font-weight:700;color:var(--white);background:var(--w12);padding:3px 10px;border-radius:99px;}
+
+/* ===================== QUESTION ===================== */
+.question-wrap{
+  background: var(--navy-card);
+  border: 1px solid var(--w12);
+  border-radius: var(--radius-lg);
+  padding: 20px 18px;
+  width: 100%;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.question-wrap::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--red),var(--gold));
+}
+.q-number{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:8px;}
+.question-text{
+  font-family: 'Playfair Display', serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.45;
+}
+
+/* ===================== OPTIONS ===================== */
+.options{width:100%;display:flex;flex-direction:column;gap:10px;}
+.option {
+  width: 100%;
+  background: var(--navy-card);
+  border: 1.5px solid var(--w12);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 14px 16px;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: background .15s, border-color .15s, transform .1s;
+  position: relative;
+  overflow: hidden;
+}
+.option:hover:not(:disabled){background:rgba(255,255,255,0.1);border-color:var(--w30);transform:translateX(2px);}
+.option:active:not(:disabled){transform:scale(.98);}
+.option:disabled{cursor:default;}
+.option.correct{background:rgba(34,197,94,0.15);border-color:var(--correct);}
+.option.wrong{background:rgba(239,68,68,0.15);border-color:var(--wrong);}
+.opt-letter{
+  width:26px;height:26px;border-radius:8px;
+  background:var(--w12);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;color:var(--w60);
+  flex-shrink:0;transition:background .2s,color .2s;
+  font-family:'DM Sans',sans-serif;
+}
+.option.correct .opt-letter{background:var(--correct);color:white;}
+.option.wrong .opt-letter{background:var(--wrong);color:white;}
+.option-text{flex:1;line-height:1.35;}
+
+/* ===================== TOAST ===================== */
+.toast{
+  position:absolute;
+  top:18px;left:50%;
+  transform:translateX(-50%) translateY(-70px);
+  background:rgba(8,18,46,0.96);
+  border:1px solid var(--w12);
+  border-radius:12px;
+  padding:10px 22px;
+  font-size:14px;font-weight:700;
+  color:var(--white);
+  z-index:200;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  white-space:nowrap;pointer-events:none;
+  backdrop-filter:blur(8px);
+}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:var(--correct);color:var(--correct);}
+.toast.bad{border-color:var(--wrong);color:var(--wrong);}
+
+/* ===================== CONGRATS ===================== */
+.confetti-wrap{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.confetti-bit{position:absolute;top:-20px;border-radius:2px;animation:fall linear infinite;}
+@keyframes fall{to{transform:translateY(900px) rotate(720deg);opacity:0;}}
+
+.congrats-title{
+  font-family:'Playfair Display',serif;
+  font-size:36px;font-weight:900;
+  color:var(--gold);
+  text-align:center;
+  text-shadow:0 0 40px var(--gold-glow);
+  margin:20px 0 10px;
+  animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes popIn{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+
+.congrats-msg{font-size:16px;color:var(--w90);text-align:center;line-height:1.65;margin-bottom:24px;}
+
+.stats-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:10px;width:100%;margin-bottom:24px;
+}
+.stat-card{
+  background:var(--navy-card);
+  border:1px solid var(--w12);
+  border-radius:var(--radius-md);
+  padding:16px 8px;
+  text-align:center;
+}
+.stat-val{font-size:24px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums;}
+.stat-lbl{font-size:10px;color:var(--w60);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px;font-weight:700;}
+
+/* ===================== FLAG HOIST ===================== */
+@keyframes hoistFlag{from{transform:translateY(16px) scaleY(0)}to{transform:translateY(0) scaleY(1)}}
+.flag-hoisted{animation:hoistFlag .6s cubic-bezier(.34,1.56,.64,1) both;transform-origin:0 0;}
+
+/* ===================== SHARE / REPORT LINK ===================== */
+.share-hint{font-size:12px;color:var(--w30);text-align:center;margin-top:10px;line-height:1.5;}
+
+/* ===================== RESPONSIVE (desktop wider) ===================== */
+@media(max-height:860px){
+  .phone{height:100vh;border-radius:0;}
+}
+@media(max-width:420px){
+  .phone{width:100vw;border-radius:0;}
+}
+</style>
+</head>
+<body>
+
+<div class="phone" id="app">
+  <div class="stars" id="stars"></div>
+  <div class="toast" id="toast"></div>
+
+  <!-- ═══════════════════════════════════
+       SCREEN 1 — SPLASH
+  ═══════════════════════════════════ -->
+  <div class="screen active" id="s-splash">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;width:100%;">
+      <div class="logo-wrap">🗽</div>
+      <h1 class="app-title">We the Future</h1>
+      <p class="app-sub">Declaration of Independence Quiz</p>
+
+
+      <div style="display:flex;gap:12px;margin-top:24px;">
+        <div style="text-align:center;flex:1;background:var(--w06);border:1px solid var(--w12);border-radius:14px;padding:14px 8px;">
+          <div style="font-size:22px;">⏱️</div>
+          <div style="font-size:12px;color:var(--w60);margin-top:4px;font-weight:600;letter-spacing:.5px;">TIMED</div>
+        </div>
+        <div style="text-align:center;flex:1;background:var(--w06);border:1px solid var(--w12);border-radius:14px;padding:14px 8px;">
+          <div style="font-size:22px;">🏆</div>
+          <div style="font-size:12px;color:var(--w60);margin-top:4px;font-weight:600;letter-spacing:.5px;">RANKED</div>
+        </div>
+        <div style="text-align:center;flex:1;background:var(--w06);border:1px solid var(--w12);border-radius:14px;padding:14px 8px;">
+          <div style="font-size:22px;">📜</div>
+          <div style="font-size:12px;color:var(--w60);margin-top:4px;font-weight:600;letter-spacing:.5px;">10 Q's</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-primary full" onclick="go('s-home')" style="margin-top:24px;">Play Now</button>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SCREEN 2 — HOME / LEADERBOARD
+  ═══════════════════════════════════ -->
+  <div class="screen" id="s-home">
+    <div class="logo-wrap logo-sm">🗽</div>
+    <h2 class="app-title" style="font-size:24px;margin-top:14px;">We the Future</h2>
+    <p class="app-sub" style="margin-bottom:16px;">Hall of Fame</p>
+
+    <div class="lb-header" style="margin-top:4px;">
+      <span class="lb-header-text">🏆 Top Patriots</span>
+      <div class="lb-bar"></div>
+    </div>
+    <div id="lb-rows" style="width:100%;"></div>
+
+    <button class="btn-primary full" onclick="go('s-setup')" style="margin-top:auto;">Play</button>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SCREEN 3 — SETUP
+  ═══════════════════════════════════ -->
+  <div class="screen" id="s-setup">
+    <div style="display:flex;flex-direction:column;align-items:center;width:100%;flex:1;">
+      <div style="background:var(--w06);border:1px solid var(--w12);border-radius:var(--radius-lg);padding:18px;width:100%;margin-bottom:24px;">
+        <p style="font-size:14px;color:var(--w90);line-height:1.65;text-align:center;">
+          Answer <strong style="color:var(--gold);">15 questions</strong> about the Declaration of Independence in <strong style="color:var(--gold);">60 seconds</strong>. Faster answers score more points!
+        </p>
+        <div style="display:flex;gap:8px;margin-top:14px;">
+          <div style="flex:1;text-align:center;background:var(--w06);border-radius:10px;padding:10px 4px;">
+            <div style="font-size:18px;">⚡</div>
+            <div style="font-size:11px;color:var(--w60);margin-top:3px;font-weight:600;">SPEED BONUS</div>
+          </div>
+          <div style="flex:1;text-align:center;background:var(--w06);border-radius:10px;padding:10px 4px;">
+            <div style="font-size:18px;">🎯</div>
+            <div style="font-size:11px;color:var(--w60);margin-top:3px;font-weight:600;">ACCURACY</div>
+          </div>
+          <div style="flex:1;text-align:center;background:var(--w06);border-radius:10px;padding:10px 4px;">
+            <div style="font-size:18px;">🔥</div>
+            <div style="font-size:11px;color:var(--w60);margin-top:3px;font-weight:600;">STREAK PTS</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-wrap">
+        <input class="name-input" id="player-name" type="text" placeholder="Enter your name to save score" maxlength="22" autocomplete="off" />
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;width:100%;">
+      <button class="btn-primary full" onclick="startGame()">Start Quiz 🗽</button>
+      <button class="btn-ghost" onclick="go('s-home')">← Leaderboard</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SCREEN 4 — QUESTION
+  ═══════════════════════════════════ -->
+  <div class="screen" id="s-question">
+    <!-- Scene / walker progress -->
+    <div class="scene-wrap">
+      <svg class="scene-svg" id="scene-svg" viewBox="0 0 342 88" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="trailG" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#22c55e"/>
+            <stop offset="100%" stop-color="#F5C41A"/>
+          </linearGradient>
+        </defs>
+        <!-- Background stars -->
+        <circle cx="18" cy="9"  r="1"   fill="white" opacity=".45"/>
+        <circle cx="52" cy="5"  r=".8"  fill="white" opacity=".35"/>
+        <circle cx="88" cy="11" r="1"   fill="white" opacity=".55"/>
+        <circle cx="135" cy="4" r=".8"  fill="white" opacity=".3"/>
+        <circle cx="168" cy="13" r="1"  fill="white" opacity=".45"/>
+        <circle cx="208" cy="7" r=".8"  fill="white" opacity=".4"/>
+        <circle cx="243" cy="3" r="1"   fill="white" opacity=".5"/>
+        <!-- Mountain -->
+        <polygon points="262,70 298,20 334,70" fill="#1e3a7a" opacity=".9"/>
+        <polygon points="280,70 308,33 334,70" fill="#162d66" opacity=".8"/>
+        <polygon points="288,40 298,20 308,40 304,37 298,28 292,37" fill="rgba(255,255,255,.22)"/>
+        <!-- Peak flagpole outline -->
+        <line x1="298" y1="20" x2="298" y2="8" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+        <path d="M298,8 Q304,10 310,8 Q304,6 298,8" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.25)" stroke-width=".5"/>
+        <!-- Ground track -->
+        <rect x="8" y="70" width="322" height="3" rx="1.5" fill="rgba(255,255,255,.1)"/>
+        <rect x="8" y="70" width="0" height="3" rx="1.5" fill="url(#trailG)" id="trail"/>
+        <!-- Walker (JS animates) -->
+        <g id="walker" transform="translate(12,70)">
+          <line id="lb-thigh" x1="0" y1="-20" x2="0" y2="-10" stroke="#5a7bbf" stroke-width="2.8" stroke-linecap="round"/>
+          <line id="lb-shin"  x1="0" y1="-10" x2="0" y2="0"  stroke="#5a7bbf" stroke-width="2.5" stroke-linecap="round"/>
+          <line id="arm-b"    x1="0" y1="-32" x2="-5" y2="-26" stroke="#5a7bbf" stroke-width="2.2" stroke-linecap="round"/>
+          <line id="torso"    x1="0" y1="-20" x2="0" y2="-32" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+          <circle id="head"  cx="0" cy="-38" r="5" fill="rgba(255,235,210,1)"/>
+          <line id="arm-fu"  x1="0" y1="-32" x2="4" y2="-40" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+          <line id="arm-ff"  x1="4" y1="-40" x2="5" y2="-47" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+          <line id="pole"    x1="5" y1="-47" x2="5" y2="-70" stroke="rgba(255,255,255,.95)" stroke-width="1.4" stroke-linecap="round"/>
+          <g id="flag-cloth">
+            <rect id="f-bg"  x="5" y="-79" width="14" height="10" rx="1" fill="#C8102E"/>
+            <rect id="f-s1"  x="5" y="-77" width="14" height="2" fill="rgba(255,255,255,.85)"/>
+            <rect id="f-s2"  x="5" y="-73" width="14" height="2" fill="rgba(255,255,255,.85)"/>
+            <rect id="f-cn"  x="5" y="-79" width="6" height="5.5" rx=".5" fill="#002868"/>
+            <circle id="f-st1" cx="6.2" cy="-77.5" r=".75" fill="white"/>
+            <circle id="f-st2" cx="8.5" cy="-76"   r=".75" fill="white"/>
+            <circle id="f-st3" cx="6.2" cy="-74.5" r=".75" fill="white"/>
+          </g>
+          <line id="lf-thigh" x1="0" y1="-20" x2="0" y2="-10" stroke="rgba(210,225,255,.95)" stroke-width="2.8" stroke-linecap="round"/>
+          <line id="lf-shin"  x1="0" y1="-10" x2="0" y2="0"  stroke="rgba(210,225,255,.95)" stroke-width="2.5" stroke-linecap="round"/>
+        </g>
+      </svg>
+      <div class="progress-meta">
+        <span class="q-counter" id="q-counter">Q 1 / 15</span>
+        <span class="timer-display" id="timer">01:00</span>
+        <span class="score-pill" id="score-pill">0 pts</span>
+      </div>
+    </div>
+
+    <!-- Streak bar -->
+    <div style="width:100%;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:12px;color:var(--w60);font-weight:600;white-space:nowrap;">STREAK</span>
+      <div style="flex:1;height:4px;border-radius:99px;background:var(--w12);overflow:hidden;">
+        <div id="streak-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--red));border-radius:99px;transition:width .3s ease;"></div>
+      </div>
+      <span id="streak-count" style="font-size:12px;color:var(--gold);font-weight:700;min-width:16px;text-align:right;">0🔥</span>
+    </div>
+
+    <div class="question-wrap">
+      <div class="q-number" id="q-number">QUESTION 1</div>
+      <p class="question-text" id="question-text">Loading…</p>
+    </div>
+    <div class="options" id="options-container"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SCREEN 5 — CONGRATS
+  ═══════════════════════════════════ -->
+  <div class="screen" id="s-congrats">
+    <div class="confetti-wrap" id="confetti"></div>
+
+    <!-- Completed scene -->
+    <div class="scene-wrap">
+      <svg class="scene-svg" viewBox="0 0 342 88" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="trailGC" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#22c55e"/>
+            <stop offset="100%" stop-color="#F5C41A"/>
+          </linearGradient>
+        </defs>
+        <circle cx="18" cy="9"  r="1"  fill="white" opacity=".7"/>
+        <circle cx="52" cy="5"  r=".8" fill="white" opacity=".55"/>
+        <circle cx="88" cy="11" r="1"  fill="white" opacity=".8"/>
+        <circle cx="135" cy="4" r=".8" fill="white" opacity=".5"/>
+        <polygon points="262,70 298,20 334,70" fill="#1e3a7a" opacity=".9"/>
+        <polygon points="280,70 308,33 334,70" fill="#162d66" opacity=".8"/>
+        <polygon points="288,40 298,20 308,40 304,37 298,28 292,37" fill="rgba(255,255,255,.28)"/>
+        <rect x="8" y="70" width="322" height="3" rx="1.5" fill="rgba(255,255,255,.1)"/>
+        <rect x="8" y="70" width="322" height="3" rx="1.5" fill="url(#trailGC)"/>
+        <!-- Hero at peak -->
+        <g transform="translate(291,12)">
+          <rect x="0" y="5" width="8" height="9" rx="2" fill="rgba(255,255,255,.9)"/>
+          <circle cx="4" cy="3.5" r="3.5" fill="rgba(255,240,220,.95)"/>
+          <path d="M.5,1.5 Q4,-1.5 7.5,1.5 L6.5,3 Q4,1 1.5,3 Z" fill="#1a2550"/>
+          <line x1="0" y1="1.5" x2="8" y2="1.5" stroke="#2a3a70" stroke-width=".8"/>
+          <line x1="7" y1="5.5" x2="11" y2="-.5" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="2" y1="14" x2="1" y2="21" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="6" y1="14" x2="7" y2="21" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="11" y1="-.5" x2="11" y2="-16" stroke="rgba(255,255,255,.95)" stroke-width="1.2" stroke-linecap="round"/>
+          <g class="flag-hoisted">
+            <path d="M11,-16 Q18,-20 25,-17 Q18,-13 11,-16" fill="#C8102E"/>
+            <line x1="11" y1="-16" x2="25" y2="-16" stroke="rgba(255,255,255,.3)" stroke-width=".6"/>
+            <line x1="11" y1="-14.5" x2="24" y2="-14.5" stroke="rgba(255,255,255,.3)" stroke-width=".6"/>
+            <circle cx="13.5" cy="-17.5" r=".9" fill="white" opacity=".95"/>
+            <circle cx="16.5" cy="-16" r=".9" fill="white" opacity=".95"/>
+            <circle cx="13.5" cy="-14.5" r=".9" fill="white" opacity=".95"/>
+          </g>
+          <circle cx="4" cy="3.5" r="13" fill="none" stroke="#F5C41A" stroke-width=".8" opacity=".45"/>
+        </g>
+      </svg>
+      <div class="progress-meta">
+        <span class="q-counter" style="color:var(--correct);">✓ Complete!</span>
+        <span class="timer-display" id="final-timer">00:00</span>
+        <span class="score-pill">Flag Hoisted 🇺🇸</span>
+      </div>
+    </div>
+
+    <div class="congrats-title">🎉 Outstanding!</div>
+    <p class="congrats-msg" id="congrats-msg">You completed the Declaration of Independence Quiz!</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-val" id="s-correct">0/10</div>
+        <div class="stat-lbl">Correct</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="s-time">0s</div>
+        <div class="stat-lbl">Time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="s-pts">0</div>
+        <div class="stat-lbl">Points</div>
+      </div>
+    </div>
+
+    <!-- Fun fact -->
+    <div id="fun-fact-wrap" style="background:var(--w06);border:1px solid var(--w12);border-radius:var(--radius-md);padding:16px;width:100%;margin-bottom:20px;display:none;">
+      <div style="font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:6px;">📜 Did you know?</div>
+      <p id="fun-fact-text" style="font-size:13px;color:var(--w90);line-height:1.6;"></p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;width:100%;margin-top:auto;">
+      <button class="btn-primary full" onclick="playAgain()">Play Again 🗽</button>
+      <button class="btn-ghost" onclick="go('s-home')">View Leaderboard</button>
+    </div>
+    <p class="share-hint">Share your score! #WeTheFuture #July4th2026</p>
+  </div>
+
+</div><!-- /phone -->
+
+<script>
+/* =====================================================================
+   DATA — 15 questions (10 randomly chosen each game)
+===================================================================== */
+const Q_BANK = [
+  {q:"What year was the Declaration of Independence adopted?",opts:["1774","1776","1781","1783"],a:1},
+  {q:"Who was the primary author of the Declaration of Independence?",opts:["John Adams","Benjamin Franklin","Thomas Jefferson","George Washington"],a:2},
+  {q:"On what date was the Declaration of Independence formally signed?",opts:["June 15, 1776","July 4, 1776","July 2, 1776","August 2, 1776"],a:3},
+  {q:"Which city hosted the signing of the Declaration of Independence?",opts:["Boston","New York","Philadelphia","Baltimore"],a:2},
+  {q:"How many colonies signed the Declaration of Independence?",opts:["12","13","14","15"],a:1},
+  {q:"Which philosopher's ideas about natural rights most influenced the Declaration?",opts:["Voltaire","Rousseau","John Locke","Montesquieu"],a:2},
+  {q:"What are the three 'unalienable rights' listed in the Declaration?",opts:["Life, Liberty, Property","Freedom, Equality, Justice","Life, Liberty, Pursuit of Happiness","Vote, Speech, Religion"],a:2},
+  {q:"How many men signed the Declaration of Independence?",opts:["42","50","56","64"],a:2},
+  {q:"Who is known for having the largest signature on the Declaration?",opts:["Thomas Jefferson","John Hancock","Benjamin Franklin","John Adams"],a:1},
+  {q:"The Declaration was primarily a declaration against which country?",opts:["France","Spain","Netherlands","Great Britain"],a:3},
+  {q:"Where is the original Declaration of Independence kept today?",opts:["Library of Congress","National Archives, D.C.","Independence Hall, Philadelphia","Smithsonian Museum"],a:1},
+  {q:"Which section lists specific complaints against King George III?",opts:["Preamble","Statement of Rights","List of Grievances","Conclusion"],a:2},
+  {q:"The phrase 'We hold these truths to be self-evident' begins which part?",opts:["The Grievances","The Preamble","The Resolution","The Conclusion"],a:1},
+  {q:"Which founding father was NOT on the Committee of Five that drafted the Declaration?",opts:["Thomas Jefferson","Benjamin Franklin","George Washington","Roger Sherman"],a:2},
+  {q:"The Declaration states governments derive their 'just powers' from where?",opts:["The King","God","The consent of the governed","The Constitution"],a:2},
+];
+
+const FUN_FACTS = [
+  "John Adams thought July 2nd would be America's birthday — he was off by two days!",
+  "The oldest signer was Benjamin Franklin (70). The youngest was Edward Rutledge (26).",
+  "Thomas Jefferson wrote the first draft in just 17 days while staying in Philadelphia.",
+  "The Declaration was written on parchment made from animal skin, likely sheepskin or calfskin.",
+  "John Hancock's bold signature was reportedly so large so King George could read it without his glasses!",
+  "Only 2 of 56 signers later became U.S. Presidents: John Adams and Thomas Jefferson.",
+];
+
+/* =====================================================================
+   LEADERBOARD — real players only, persisted in localStorage
+===================================================================== */
+function loadLB(){
+  try{ return JSON.parse(localStorage.getItem('wtf_lb')||'[]'); }
+  catch(e){ return []; }
+}
+function saveLB(lb){
+  try{ localStorage.setItem('wtf_lb', JSON.stringify(lb)); }catch(e){}
+}
+let LB = loadLB();
+
+/* =====================================================================
+   GAME STATE
+===================================================================== */
+const GAME_TIME = 60;
+let questions=[], qIdx=0, score=0, correctCount=0, streak=0;
+let timeLeft=GAME_TIME, elapsed=0, timerID=null;
+let playerName="", answered=false;
+let walkerX=12, walkerTargetX=12, walkPhase=0, flagPhase=0;
+
+/* =====================================================================
+   INIT
+===================================================================== */
+(function init(){
+  makeStars();
+  renderLB();
+  requestAnimationFrame(walkerLoop);
+})();
+
+function makeStars(){
+  const c = document.getElementById('stars');
+  for(let i=0;i<65;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    const sz=Math.random()*2.5+.4;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${(Math.random()*3+1).toFixed(1)}s;animation-delay:${(Math.random()*3).toFixed(1)}s`;
+    c.appendChild(s);
+  }
+}
+
+/* =====================================================================
+   SCREEN NAV
+===================================================================== */
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='s-home') renderLB();
+}
+
+/* =====================================================================
+   LEADERBOARD
+===================================================================== */
+function renderLB(){
+  const sorted=[...LB].sort((a,b)=>b.pts-a.pts||a.secs-b.secs).slice(0,5);
+  const m=['🥇','🥈','🥉','4️⃣','5️⃣'];
+  const wrap=document.getElementById('lb-rows');
+  if(sorted.length===0){
+    wrap.innerHTML=`<div style="text-align:center;padding:32px 16px;">
+      <div style="font-size:40px;margin-bottom:12px;">🗽</div>
+      <div style="font-size:15px;font-weight:600;color:var(--w60);">No scores yet</div>
+      <div style="font-size:13px;margin-top:6px;color:var(--w30);">Be the first to play and claim the top spot!</div>
+    </div>`;
+    return;
+  }
+  wrap.innerHTML=sorted.map((e,i)=>`
+    <div class="lb-row" style="${e.isYou?'border-color:var(--gold);background:rgba(245,196,26,0.08);':''}">
+      <div class="lb-medal">${m[i]}</div>
+      <span class="lb-name">${esc(e.name)}${e.isYou?' <span style="font-size:10px;color:var(--gold);font-weight:800;margin-left:4px;">YOU</span>':''}</span>
+      <span class="lb-time">${e.secs}s</span>
+      <span class="lb-pts">${e.pts}</span>
+    </div>`).join('');
+}
+function esc(s){return s.replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* =====================================================================
+   GAME START
+===================================================================== */
+function startGame(){
+  playerName=(document.getElementById('player-name').value.trim()||'Patriot').slice(0,22);
+  questions=shuffle([...Q_BANK]).slice(0,15);
+  qIdx=0; score=0; correctCount=0; streak=0;
+  timeLeft=GAME_TIME; elapsed=0; answered=false;
+  walkerX=12; walkerTargetX=12;
+  go('s-question');
+  renderQ();
+  startTimer();
+}
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+  return arr;
+}
+
+/* =====================================================================
+   TIMER
+===================================================================== */
+function startTimer(){
+  clearInterval(timerID);
+  timerID=setInterval(()=>{
+    timeLeft--; elapsed++;
+    updateTimerUI();
+    const prog=1-(timeLeft/GAME_TIME);
+    walkerTargetX=12+prog*258;
+    const t=document.getElementById('trail');
+    if(t) t.setAttribute('width',Math.round(prog*322));
+    if(timeLeft<=0){clearInterval(timerID);endGame();}
+  },1000);
+}
+
+function updateTimerUI(){
+  const m=String(Math.floor(timeLeft/60)).padStart(2,'0');
+  const s=String(timeLeft%60).padStart(2,'0');
+  const el=document.getElementById('timer');
+  el.textContent=`${m}:${s}`;
+  el.style.color=timeLeft<=8?'var(--wrong)':'var(--gold)';
+}
+
+/* =====================================================================
+   QUESTION RENDER
+===================================================================== */
+function renderQ(){
+  answered=false;
+  const q=questions[qIdx];
+  document.getElementById('q-counter').textContent=`Q ${qIdx+1} / ${questions.length}`;
+  document.getElementById('q-number').textContent=`QUESTION ${qIdx+1}`;
+  document.getElementById('question-text').textContent=q.q;
+  document.getElementById('score-pill').textContent=score+' pts';
+  updateStreak();
+
+  const letters=['A','B','C','D'];
+  document.getElementById('options-container').innerHTML=q.opts.map((opt,i)=>`
+    <button class="option" id="opt${i}" onclick="pick(${i})">
+      <div class="opt-letter" id="dot${i}">${letters[i]}</div>
+      <span class="option-text">${esc(opt)}</span>
+    </button>`).join('');
+}
+
+function updateStreak(){
+  const pct=Math.min(streak/5*100,100);
+  document.getElementById('streak-bar').style.width=pct+'%';
+  document.getElementById('streak-count').textContent=streak>0?`${streak}🔥`:'0';
+}
+
+/* =====================================================================
+   ANSWER
+===================================================================== */
+function pick(idx){
+  if(answered) return;
+  answered=true;
+  const q=questions[qIdx];
+  const correct=q.a;
+  document.querySelectorAll('.option').forEach(o=>o.disabled=true);
+
+  if(idx===correct){
+    document.getElementById(`opt${idx}`).classList.add('correct');
+    document.getElementById(`dot${idx}`).textContent='✓';
+    streak++;
+    const speedBonus=Math.round((timeLeft/GAME_TIME)*40);
+    const streakBonus=Math.min(streak-1,4)*5;
+    const pts=50+speedBonus+streakBonus;
+    score+=pts;
+    correctCount++;
+    toast(`+${pts} pts! Correct! 🎉`,'ok');
+  } else {
+    document.getElementById(`opt${idx}`).classList.add('wrong');
+    document.getElementById(`dot${idx}`).textContent='✕';
+    document.getElementById(`opt${correct}`).classList.add('correct');
+    document.getElementById(`dot${correct}`).textContent='✓';
+    streak=0;
+    toast('Not quite — keep going! 💪','bad');
+  }
+
+  document.getElementById('score-pill').textContent=score+' pts';
+  updateStreak();
+
+  setTimeout(()=>{
+    if(timeLeft>0) advance();
+  },900);
+}
+
+function advance(){
+  qIdx++;
+  if(qIdx>=questions.length||timeLeft<=0) endGame();
+  else renderQ();
+}
+
+function toast(msg,cls){
+  const t=document.getElementById('toast');
+  t.className=`toast ${cls}`;
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* =====================================================================
+   END GAME
+===================================================================== */
+function endGame(){
+  clearInterval(timerID);
+  const m=String(Math.floor(elapsed/60)).padStart(2,'0');
+  const s=String(elapsed%60).padStart(2,'0');
+  document.getElementById('final-timer').textContent=`${m}:${s}`;
+  document.getElementById('s-correct').textContent=`${correctCount}/${questions.length}`;
+  document.getElementById('s-time').textContent=elapsed+'s';
+  document.getElementById('s-pts').textContent=score;
+  document.getElementById('congrats-msg').textContent=
+    `${playerName} answered ${correctCount} of ${questions.length} correctly in ${elapsed}s — earning ${score} points!`;
+
+  const ff=FUN_FACTS[Math.floor(Math.random()*FUN_FACTS.length)];
+  document.getElementById('fun-fact-text').textContent=ff;
+  document.getElementById('fun-fact-wrap').style.display='block';
+
+  // Clear any previous "YOU" markers, then add new entry
+  LB.forEach(e=>delete e.isYou);
+  LB.push({name:playerName,secs:elapsed,pts:score,correct:correctCount,isYou:true});
+  saveLB(LB);
+  go('s-congrats');
+  spawnConfetti();
+}
+
+function playAgain(){
+  document.getElementById('player-name').value=playerName;
+  go('s-setup');
+}
+
+/* =====================================================================
+   CONFETTI
+===================================================================== */
+function spawnConfetti(){
+  const wrap=document.getElementById('confetti');
+  wrap.innerHTML='';
+  const colors=['#C8102E','#F5C41A','#ffffff','#3b82f6','#22c55e','#f97316','#a855f7','#002868'];
+  for(let i=0;i<65;i++){
+    const p=document.createElement('div');
+    p.className='confetti-bit';
+    p.style.cssText=`
+      left:${Math.random()*100}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      width:${6+Math.random()*8}px;height:${10+Math.random()*12}px;
+      border-radius:${Math.random()>.5?'50%':'2px'};
+      animation-duration:${2+Math.random()*3}s;
+      animation-delay:${Math.random()*2}s;
+      opacity:${.7+Math.random()*.3};`;
+    wrap.appendChild(p);
+  }
+}
+
+/* =====================================================================
+   WALKER ANIMATION
+===================================================================== */
+function sl(id,x1,y1,x2,y2){
+  const e=document.getElementById(id);if(!e)return;
+  e.setAttribute('x1',x1.toFixed(1));e.setAttribute('y1',y1.toFixed(1));
+  e.setAttribute('x2',x2.toFixed(1));e.setAttribute('y2',y2.toFixed(1));
+}
+function fk(px,py,len,deg){
+  const a=deg*Math.PI/180;
+  return{x:px+len*Math.sin(a),y:py+len*Math.cos(a)};
+}
+
+function walkerLoop(){
+  requestAnimationFrame(walkerLoop);
+  walkerX+=(walkerTargetX-walkerX)*.025;
+  walkPhase+=.05; flagPhase+=.04;
+  const t=walkPhase,fw=flagPhase;
+  const bob=1.2*Math.abs(Math.sin(t));
+  const HIP=-20+bob,SHL=-32+bob,HEAD=-38+bob;
+
+  // legs
+  const fTA=30*Math.sin(t),fSA=fTA-20*Math.max(0,Math.sin(t));
+  const fK=fk(0,HIP,12,fTA),fF=fk(fK.x,fK.y,12,fSA);
+  const bTA=-30*Math.sin(t),bSA=bTA-20*Math.max(0,Math.sin(t+Math.PI));
+  const bK=fk(0,HIP,12,bTA),bF=fk(bK.x,bK.y,12,bSA);
+  sl('lf-thigh',0,HIP,fK.x,fK.y);sl('lf-shin',fK.x,fK.y,fF.x,0);
+  sl('lb-thigh',0,HIP,bK.x,bK.y);sl('lb-shin',bK.x,bK.y,bF.x,0);
+  sl('torso',0,HIP,0,SHL);
+  const hd=document.getElementById('head');
+  if(hd){hd.setAttribute('cy',(HEAD).toFixed(1));}
+  const bH=fk(0,SHL,15,-25*Math.sin(t));
+  sl('arm-b',0,SHL,bH.x,bH.y);
+  const sway=3*Math.sin(t);
+  // Left arm raised holding flag — walker faces RIGHT toward mountain
+  const elb=fk(0,SHL,8,110+sway),hand=fk(elb.x,elb.y,7,130+sway*.5);
+  sl('arm-fu',0,SHL,elb.x,elb.y);sl('arm-ff',elb.x,elb.y,hand.x,hand.y);
+  const pTop={x:hand.x-sway*.3,y:hand.y-23};
+  sl('pole',hand.x,hand.y,pTop.x,pTop.y);
+  // Flag flies LEFT (trails behind walker moving right)
+  const wave=1.5*Math.sin(fw);
+  const FW=14+wave;  // flag width, expands/contracts with wave
+  const fx=pTop.x, fy=pTop.y-10;  // pole top = right edge of flag
+  // All flag pieces: x = fx - FW (left edge), width = FW (extends leftward)
+  const setR=(id,yOff,h)=>{const e=document.getElementById(id);if(!e)return;e.setAttribute('x',(fx-FW).toFixed(1));e.setAttribute('y',(fy+yOff).toFixed(1));e.setAttribute('width',FW.toFixed(1));e.setAttribute('height',h);};
+  setR('f-bg',0,10); setR('f-s1',2,2); setR('f-s2',5.5,2);
+  // Canton (blue) on RIGHT side of flag (near pole)
+  const cn=document.getElementById('f-cn');if(cn){cn.setAttribute('x',(fx-6).toFixed(1));cn.setAttribute('y',(fy).toFixed(1));cn.setAttribute('width',6);cn.setAttribute('height','5.5');}
+  // Stars inside canton
+  const setSC=(id,dx,dy)=>{const e=document.getElementById(id);if(!e)return;e.setAttribute('cx',(fx-dx).toFixed(1));e.setAttribute('cy',(fy+dy).toFixed(1));};
+  setSC('f-st1',4.8,1.5); setSC('f-st2',2.5,3); setSC('f-st3',4.8,4.5);
+  const wg=document.getElementById('walker');
+  if(wg)wg.setAttribute('transform',`translate(${walkerX.toFixed(1)},70)`);
+}
+</script>
+</body>
+</html>
